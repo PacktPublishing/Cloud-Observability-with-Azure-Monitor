@@ -1,0 +1,384 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# Azure Orphaned Network Resources\r\nThis workbook helps you to analyze all your Orphaned network resources."
+      },
+      "name": "text - Title"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "8b799e9b-2862-48f6-b021-d10b99f96bc8",
+            "version": "KqlParameterItem/1.0",
+            "name": "Subscription",
+            "type": 6,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "includeAll": true,
+              "selectAllValue": "",
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "value": [
+              "value::all"
+            ]
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "parameters - Filter by Subscription"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "dd447101-6059-41d5-b8d9-b5019c40a808",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Overview",
+            "subTarget": "overview",
+            "style": "link",
+            "linkIsContextBlade": true
+          },
+          {
+            "id": "d9673fae-a8e1-487a-bc52-a31cba5897a0",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Public IPs",
+            "subTarget": "publicIps",
+            "style": "link"
+          },
+          {
+            "id": "52393260-4919-41ae-b42f-65904237641e",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "NICs",
+            "subTarget": "nics",
+            "style": "link"
+          },
+          {
+            "id": "6975f8ee-a970-4c98-9cdc-000d4f163ea6",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "NSGs",
+            "subTarget": "nsgs",
+            "style": "link"
+          },
+          {
+            "id": "023c69b3-1343-4046-9404-e140ebf721db",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "vNets",
+            "subTarget": "vnets",
+            "style": "link"
+          },
+          {
+            "id": "367830ad-e57b-4577-ba87-fe65add56b18",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "snets",
+            "subTarget": "snets",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "links - Tabs"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type == \"microsoft.network/publicipaddresses\"\r\n| where properties.ipConfiguration == \"\" and properties.natGateway == \"\" and properties.publicIPPrefix == \"\"\r\n| summarize count(type)",
+              "size": 4,
+              "title": "Public IPs",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "count_type",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "coldHot"
+                  }
+                },
+                "showBorder": true,
+                "sortOrderField": 1,
+                "size": "auto"
+              }
+            },
+            "customWidth": "17",
+            "name": "query - Overview - Public IPs"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type has \"microsoft.network/networkinterfaces\"\r\n| where isnull(properties.privateEndpoint)\r\n| where isnull(properties.privateLinkService)\r\n| where properties.hostedWorkloads == \"[]\"\r\n| where properties !has 'virtualmachine'\r\n| summarize count(type)",
+              "size": 4,
+              "title": "NICs",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "count_type",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "coldHot"
+                  }
+                },
+                "showBorder": true,
+                "size": "auto"
+              }
+            },
+            "customWidth": "17",
+            "name": "query - Overview - NICs"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type == \"microsoft.network/networksecuritygroups\" and isnull(properties.networkInterfaces) and isnull(properties.subnets)\r\n| summarize count(type)",
+              "size": 4,
+              "title": "NSGs",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "count_type",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "coldHot"
+                  }
+                },
+                "showBorder": true,
+                "size": "auto"
+              }
+            },
+            "customWidth": "17",
+            "name": "query - Overview - NSGs"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type == \"microsoft.network/networksecuritygroups\" and isnull(properties.networkInterfaces) and isnull(properties.subnets)\r\n| summarize count(type)",
+              "size": 4,
+              "title": "vNets",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "count_type",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "coldHot"
+                  }
+                },
+                "showBorder": true,
+                "size": "auto"
+              }
+            },
+            "customWidth": "17",
+            "name": "query - Overview - vNets"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type =~ \"microsoft.network/virtualnetworks\"\r\n| extend subnet = properties.subnets\r\n| mv-expand subnet\r\n| extend ipConfigurations = subnet.properties.ipConfigurations\r\n| extend delegations = subnet.properties.delegations\r\n| where isnull(ipConfigurations) and delegations == \"[]\"\r\n| summarize count(subnet)",
+              "size": 4,
+              "title": "snets",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "count_subnet",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "coldHot"
+                  }
+                },
+                "showBorder": true,
+                "size": "auto"
+              }
+            },
+            "customWidth": "17",
+            "name": "query - Overview - snets"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "overview"
+      },
+      "name": "group - Overview"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.network/publicipaddresses\"\r\n| where properties.ipConfiguration == \"\" and properties.natGateway == \"\" and properties.publicIPPrefix == \"\"\r\n| summarize count(type)",
+              "size": 4,
+              "title": "Public IPs",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "count_type",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "coldHot"
+                  }
+                },
+                "showBorder": true,
+                "size": "auto"
+              }
+            },
+            "customWidth": "17",
+            "name": "query - PublicIps"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.network/publicipaddresses\"\r\n| where properties.ipConfiguration == \"\" and properties.natGateway == \"\" and properties.publicIPPrefix == \"\"\r\n| extend Details = pack_all()\r\n| project ResourceName=id, ResourceGroup=resourceGroup, Location=location, Subscription=subscriptionId, Type=tostring(sku.name), AllocationMethod=tostring(properties.publicIPAllocationMethod), Tags=tags, Details",
+              "size": 3,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Details",
+                    "formatter": 7,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkLabel": "Details",
+                      "linkIsContextBlade": true
+                    }
+                  }
+                ],
+                "rowLimit": 1000,
+                "filter": true
+              }
+            },
+            "customWidth": "70",
+            "name": "query - 1"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "publicIps"
+      },
+      "name": "group - Public IPs"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "NICs"
+            },
+            "name": "text - 0"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "nics"
+      },
+      "name": "group - NICs"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "nsgs"
+            },
+            "name": "text - 0"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "nsgs"
+      },
+      "name": "group - NSGs"
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
