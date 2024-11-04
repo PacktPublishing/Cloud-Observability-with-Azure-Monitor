@@ -1,0 +1,24 @@
+{
+    "properties": {
+        "schema": {
+            "name": "PacktTable_CL",
+            "columns": [
+                {
+                    "name": "TimeGenerated",
+                    "type": "datetime",
+                    "description": "The time at which the event occurred."
+                },
+               {
+                    "name": "hostname",
+                    "type": "string",
+                    "description": "The computer name that generated the event."
+                },
+                {
+                    "name": "eventMessage",
+                    "type": "dynamic",
+                    "description": "Additional information of the event."
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,33 @@
+time=$(date -u +"%Y-%m-%dT%H:%M:%S")
+echo '{ 
+  "time": "'$time'", 
+  "data": { 
+      "baseData": { 
+          "metric": "PacktCustomMetric", 
+          "namespace": "PacktMetrics", 
+          "dimNames": [
+            "PacktProcess"
+          ],
+          "series": [ 
+            { 
+              "dimValues": [
+                "PacktApp1.exe"
+              ],
+              "min": 2, 
+              "max": 12, 
+              "sum": 14, 
+              "count": 2 
+            }, 
+            { 
+              "dimValues": [
+                "PacktApp2.exe"
+              ],
+              "min": 4, 
+              "max": 10, 
+              "sum": 19, 
+              "count": 3 
+            } 
+          ] 
+      } 
+  } 
+}' > PacktCustomMetric.json
