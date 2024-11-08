@@ -49,7 +49,7 @@ With the following software and hardware list you can run all code files present
 ### Related products
 * Observability with Grafana [[Packt]](https://www.packtpub.com/en-US/product/observability-with-grafana-9781803248004) [[Amazon]](https://www.amazon.com/dp/1803248009)
 
-* Implementing GitOps with Kubernetes [[Packt]](https://www.packtpub.com/en-us/product/implementing-gitops-with-kubernetes-9781835884225) [[Amazon]](https://www.amazon.com/Implementing-GitOps-Kubernetes-infrastructure-cloud-native-ebook/dp/B0D7VHG4PB)
+* Implementing GitOps with Kubernetes [[Packt]](https://www.packtpub.com/en-us/product/implementing-gitops-with-kubernetes-9781835884225) [[Amazon]](https://www.amazon.com/Implementing-GitOps-Kubernetes-infrastructure-cloud-native/dp/B0D7PZ7171)
 
 ## Get to Know the Authors
 **José Ángel Fernández**
